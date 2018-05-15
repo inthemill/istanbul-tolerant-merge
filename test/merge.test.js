@@ -3,6 +3,7 @@ const path = require('path');
 const merge = require('../index.js').merge;
 const temp = require('temp');
 const fs = require('fs');
+const normalize = require('normalize-path');
 
 const allKarma = _(require('./resources/karma.json')).mapKeys((v, k) => k.replace('${pwd}', process.cwd())).mapValues((v, k) => ({
     ...v,
@@ -12,12 +13,12 @@ const allKarma = _(require('./resources/karma.json')).mapKeys((v, k) => k.replac
 const allMocha = require('./resources/mocha.json');
 const allKarmaClone = _.cloneDeep(allKarma);
 const allMochaClone = _.cloneDeep(allMocha);
-const problemFile = 'src\\kachelVertrag\\gui\\kachelVertrag.service.ts';
+const problemFile = normalize('src\\kachelVertrag\\gui\\kachelVertrag.service.ts');
 
 describe('istanbul-prepare-merge', () => {
     test('merged json has all needed keys', () => {
         const result = merge([allKarma, allMocha]);
-        _([merge([allKarma]), allMocha]).map(_.keys).flatten().uniq().forEach(k => expect(result[k]).toBeDefined());
+        _([merge([allKarma]), merge([allMocha])]).map(_.keys).flatten().uniq().forEach(k => expect(result[k]).toBeDefined());
         checkUnchanged();
     });
 
@@ -40,27 +41,23 @@ describe('istanbul-prepare-merge', () => {
     });
 
     test('normalize file path', () => {
-        const pathToBeModified = process.cwd() + '\\' + problemFile;
-        let modifiedKarma = _.mapKeys(allKarma, (v, k) => {
-            if (k === problemFile) {
-                return pathToBeModified
-            } else {
-                return k;
-            }
-        });
-        modifiedKarma[pathToBeModified].path = pathToBeModified;
-        const result = merge([modifiedKarma, allMocha], {base: process.cwd()});
+        const pathToBeModified = process.cwd() +  '\\src\\kachelVertrag\\gui\\kachelVertrag.service.ts';
+        expect(allKarma[pathToBeModified]).not.toBeUndefined();
+
+        expect(allKarma[problemFile]).toBeUndefined();
+
+        const result = merge([allKarma, allMocha], {base: process.cwd()});
+        expect(result[pathToBeModified]).toBeUndefined();
         expect(result[problemFile].f[1]).toEqual(2);
         expect(result[problemFile].path).toEqual(problemFile);
-        expect(result[pathToBeModified]).toBeUndefined();
-        const result2 = merge([allMocha, modifiedKarma]);
+        const result2 = merge([allMocha, allKarma]);
         expect(result2[problemFile].path).toEqual(problemFile);
     });
 
     test('path.relative', () => {
-        let abs = path.resolve('src//index');
-        expect(abs).toEqual(process.cwd() + '\\src\\index');
-        expect(path.relative(process.cwd(), abs)).toEqual('src\\index');
+        let abs = path.resolve('src','index');
+        expect(abs).toEqual(path.join(process.cwd(), 'src', 'index'));
+        expect(path.relative(process.cwd(), abs)).toEqual(path.join('src','index'));
     });
 
     test('can read from list of files', () => {
@@ -101,7 +98,7 @@ describe('istanbul-prepare-merge', () => {
 
     test('can find problem in bad files', () => {
         const result = merge([__dirname + '/resources/bad1/*.json']);
-        expect(result['src\\produktauswahl\\produktauswahlNeugeschaeft.component.ts'].s[1]).toEqual(2);
+        expect(result['src/produktauswahl/produktauswahlNeugeschaeft.component.ts'].s[1]).toEqual(2);
     });
 
 });
