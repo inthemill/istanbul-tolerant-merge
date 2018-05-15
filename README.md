@@ -16,7 +16,7 @@ With [npm](https://www.npmjs.com/) do
 ## Usage
 
 ```bash
-npx --out coverage/coverage.json "coverage/partial/*.json"
+npx istanbul-tolerant-merge --out coverage/coverage.json "coverage/partial/*.json"
 ```
 
 ## Help
