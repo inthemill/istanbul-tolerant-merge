@@ -3,14 +3,18 @@ const path = require('path');
 const glob = require('glob');
 const fs = require('fs');
 const astar = require('a-star');
-module.exports = {merge};
+module.exports = {
+    merge
+};
 
 const defaultConfig = {
     base: process.cwd()
 };
 
 function merge(inputs, config = {}) {
-    config = {...defaultConfig, ...config};
+    config = { ...defaultConfig,
+        ...config
+    };
     return _.chain(_.isArray(inputs) ? inputs : [inputs])
         .flatMap(loadFromFS)
         .map(_.partial(normalizePath, config.base))
@@ -39,7 +43,9 @@ function loadFromFS(pathOrObject) {
         }
         return files
             .map(file => {
-                let content = fs.readFileSync(file, {encoding: 'utf-8'});
+                let content = fs.readFileSync(file, {
+                    encoding: 'utf-8'
+                });
                 if (_.isNil(content)) {
                     throw new Error(`Error reading file ${file}`);
                 }
@@ -64,10 +70,12 @@ function mergeFile(one, two) {
     };
 }
 
-function normalizePath(base, coverageJson,) {
+function normalizePath(base, coverageJson, ) {
     return _(coverageJson)
         .mapKeys((v, key) => path.relative(base, path.resolve(base, key)))
-        .mapValues((v, key) => ({...v, path: key})).value();
+        .mapValues((v, key) => ({ ...v,
+            path: key
+        })).value();
 }
 
 function fixKarmaBug(coverageJson) {
@@ -104,17 +112,21 @@ function mergeStatements(one, two) {
     const mapping = getMapping(one.statementMap, two.statementMap, statementCost);
     return _(mapping)
         .map(([i1, i2], index) => ({
-            statementMap: {[index + 1]: one.statementMap[i1] || two.statementMap[i2]},
-            s: {[index + 1]: (one.s[i1] || 0) + (two.s[i2] || 0)}
+            statementMap: {
+                [index + 1]: one.statementMap[i1] || two.statementMap[i2]
+            },
+            s: {
+                [index + 1]: (one.s[i1] || 0) + (two.s[i2] || 0)
+            }
         }))
         .reduce(_.merge)
 }
 
 function statementCost(s1, s2) {
-    return Math.abs(s1.start.line - s2.start.line) * 5
-        + Math.abs(s1.end.line - s2.end.line) * 5
-        + Math.abs(s1.start.column - s2.start.column)
-        + Math.abs(s1.end.column - s2.end.column)
+    return Math.abs(s1.start.line - s2.start.line) * 5 +
+        Math.abs(s1.end.line - s2.end.line) * 5 +
+        Math.abs(s1.start.column - s2.start.column) +
+        Math.abs(s1.end.column - s2.end.column)
 }
 
 function getMapping(sm1, sm2, costFn) {
@@ -123,7 +135,11 @@ function getMapping(sm1, sm2, costFn) {
     const sol = astar({
         start: [1, 1],
         isEnd: pair => _.isEqual(pair, end),
-        neighbor: ([i1, i2]) => [[i1 + 1, i2], [i1 + 1, i2 + 1], [i1, i2 + 1]],
+        neighbor: ([i1, i2]) => [
+            [i1 + 1, i2],
+            [i1 + 1, i2 + 1],
+            [i1, i2 + 1]
+        ],
         distance: (from, to) => {
             if (from[0] === to[0] || from[1] === to[1]) {
                 return penalty;

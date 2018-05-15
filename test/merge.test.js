@@ -49,7 +49,9 @@ describe('istanbul-prepare-merge', () => {
             }
         });
         modifiedKarma[pathToBeModified].path = pathToBeModified;
-        const result = merge([modifiedKarma, allMocha], {base: process.cwd()});
+        const result = merge([modifiedKarma, allMocha], {
+            base: process.cwd()
+        });
         expect(result[problemFile].f[1]).toEqual(2);
         expect(result[problemFile].path).toEqual(problemFile);
         expect(result[pathToBeModified]).toBeUndefined();
@@ -90,9 +92,13 @@ describe('istanbul-prepare-merge', () => {
     test('can safe file', () => {
         const path = temp.path();
         try {
-            merge([__dirname + '/resources/*.normalized.*', __dirname + '/resources/mocha.*'], {out: path});
+            merge([__dirname + '/resources/*.normalized.*', __dirname + '/resources/mocha.*'], {
+                out: path
+            });
 
-            const result = JSON.parse(fs.readFileSync(path, {encoding: 'utf-8'}));
+            const result = JSON.parse(fs.readFileSync(path, {
+                encoding: 'utf-8'
+            }));
             expect(result[problemFile].f[1]).toEqual(2);
         } finally {
             fs.unlinkSync(path);
