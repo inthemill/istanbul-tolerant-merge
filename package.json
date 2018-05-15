@@ -18,6 +18,7 @@
     "a-star": "^0.2.0",
     "glob": "^7.1.2",
     "lodash": "^4.17.10",
+    "normalize-path": "^3.0.0",
     "yargs": "^11.0.0"
   },
   "devDependencies": {

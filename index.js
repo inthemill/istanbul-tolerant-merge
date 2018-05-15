@@ -1,6 +1,7 @@
 const _ = require('lodash');
 const path = require('path');
 const glob = require('glob');
+const normalize = require('normalize-path');
 const fs = require('fs');
 const astar = require('a-star');
 module.exports = {
@@ -70,9 +71,15 @@ function mergeFile(one, two) {
     };
 }
 
+
 function normalizePath(base, coverageJson, ) {
     return _(coverageJson)
-        .mapKeys((v, key) => path.relative(base, path.resolve(base, key)))
+        .mapKeys((v, key) => {
+            const abs = path.resolve(base, normalize(key));
+            const relative = path.relative(base, abs);
+            const newKey = path.normalize(relative);
+            return newKey;
+        })
         .mapValues((v, key) => ({ ...v,
             path: key
         })).value();
