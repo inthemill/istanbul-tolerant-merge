@@ -41,12 +41,14 @@ describe('istanbul-prepare-merge', () => {
     });
 
     test('normalize file path', () => {
-        const pathToBeModified = process.cwd() +  '\\src\\kachelVertrag\\gui\\kachelVertrag.service.ts';
+        const pathToBeModified = process.cwd() + '\\src\\kachelVertrag\\gui\\kachelVertrag.service.ts';
         expect(allKarma[pathToBeModified]).not.toBeUndefined();
 
         expect(allKarma[problemFile]).toBeUndefined();
 
-        const result = merge([allKarma, allMocha], {base: process.cwd()});
+        const result = merge([allKarma, allMocha], {
+            base: process.cwd()
+        });
         expect(result[pathToBeModified]).toBeUndefined();
         expect(result[problemFile].f[1]).toEqual(2);
         expect(result[problemFile].path).toEqual(problemFile);
@@ -55,9 +57,9 @@ describe('istanbul-prepare-merge', () => {
     });
 
     test('path.relative', () => {
-        let abs = path.resolve('src','index');
+        let abs = path.resolve('src', 'index');
         expect(abs).toEqual(path.join(process.cwd(), 'src', 'index'));
-        expect(path.relative(process.cwd(), abs)).toEqual(path.join('src','index'));
+        expect(path.relative(process.cwd(), abs)).toEqual(path.join('src', 'index'));
     });
 
     test('can read from list of files', () => {
