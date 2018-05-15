@@ -15,7 +15,7 @@ const options = require('yargs')
     .string('_')
     .describe('_', 'paths to raw coverage report JSON files to merge')
     .help()
-    .usage('Usage: $0 --out path/to/output.json "a/**.json" b/input.json')
+    .usage('Usage: istanbul-tolerant-merge --out path/to/output.json "a/**.json" b/input.json')
     .version()
     .argv;
 
