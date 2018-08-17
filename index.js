@@ -68,6 +68,7 @@ function mergeFile(one, two) {
         ...mergeFunctions(one, two),
         ...mergeBranchs(one, two),
         ...mergeStatements(one, two),
+        ...mergeLines(one, two)
     };
 }
 
@@ -127,6 +128,17 @@ function mergeStatements(one, two) {
             }
         }))
         .reduce(_.merge)
+}
+
+function mergeLines(one, two){
+    if (!one.l || !two.l) {
+        return;
+    }
+    return {
+        l: _.mapValues(_.zipObject(_.union(_.keys(one.l), _.keys(two.l))), function (value, key) {
+            return one.l[key] + two.l[key];
+        })
+    }
 }
 
 function statementCost(s1, s2) {
