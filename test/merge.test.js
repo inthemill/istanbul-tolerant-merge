@@ -60,7 +60,6 @@ describe('istanbul-prepare-merge', () => {
         });
         expect(getCoverageOfFile(result, pathToBeModified)).toBeUndefined();
         expect(getProblemCoverage(result).f[1]).toEqual(2);
-        expect(getProblemCoverage(result).path).toEqual(problemFile);
         const result2 = merge([allMocha, allKarma]);
         expect(getProblemCoverage(result2).path).toEqual(problemFile);
     });
