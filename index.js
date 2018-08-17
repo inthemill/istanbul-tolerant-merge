@@ -13,7 +13,8 @@ const defaultConfig = {
 };
 
 function merge(inputs, config = {}) {
-    config = { ...defaultConfig,
+    config = {
+        ...defaultConfig,
         ...config
     };
     return _.chain(_.isArray(inputs) ? inputs : [inputs])
@@ -73,7 +74,7 @@ function mergeFile(one, two) {
 }
 
 
-function normalizePath(base, coverageJson, ) {
+function normalizePath(base, coverageJson) {
     return _(coverageJson)
         .mapKeys((v, key) => {
             const abs = path.resolve(base, normalize(key));
@@ -81,7 +82,8 @@ function normalizePath(base, coverageJson, ) {
             const newKey = path.normalize(relative);
             return newKey;
         })
-        .mapValues((v, key) => ({ ...v,
+        .mapValues((v, key) => ({
+            ...v,
             path: key
         })).value();
 }
@@ -130,13 +132,14 @@ function mergeStatements(one, two) {
         .reduce(_.merge)
 }
 
-function mergeLines(one, two){
-    if (!one.l || !two.l) {
-        return;
-    }
+function mergeLines(one, two) {
+    const linesOne = _.isUndefined(one.l) ? {} : _.cloneDeep(one.l);
+    const linesTwo = _.isUndefined(two.l) ? {} : _.cloneDeep(two.l);
     return {
-        l: _.mapValues(_.zipObject(_.union(_.keys(one.l), _.keys(two.l))), function (value, key) {
-            return one.l[key] + two.l[key];
+        l: _.mergeWith(linesOne, linesTwo, (a, b) => {
+            if (!a) a = 0;
+            if (!b) b = 0;
+            return a + b;
         })
     }
 }
