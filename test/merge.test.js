@@ -12,8 +12,10 @@ const allKarma = _(require('./resources/karma.json')).mapKeys((v, k) => k.replac
 
 
 const allMocha = require('./resources/mocha.json');
+const allPact = require('./resources/pact.json');
 const allKarmaClone = _.cloneDeep(allKarma);
 const allMochaClone = _.cloneDeep(allMocha);
+const allPactClone = _.cloneDeep(allPact);
 const problemFile = path.normalize('src\\kachelVertrag\\gui\\kachelVertrag.service.ts');
 
 function getCoverageOfFile(coverage, fileName) {
@@ -46,6 +48,13 @@ describe('istanbul-prepare-merge', () => {
     test('merges function coverage sucessfully', () => {
         const result = merge([allKarma, allMocha]);
         expect(getProblemCoverage(result).f[1]).toEqual(2);
+        checkUnchanged();
+    });
+
+    test('merge line coverage sucessfully', () => {
+        const result = merge([allMocha, allPact]);
+        const file = path.normalize('src\\vertragReadModel\\vertrag.readModel.integrationservices.ts');
+        expect(getCoverageOfFile(result, file).l[1]).toEqual(2);
         checkUnchanged();
     });
 
@@ -128,5 +137,6 @@ describe('istanbul-prepare-merge', () => {
 
 function checkUnchanged() {
     expect(allKarma).toEqual(allKarmaClone);
-    expect(allMocha).toEqual(allMochaClone)
+    expect(allMocha).toEqual(allMochaClone);
+    expect(allPact).toEqual(allPactClone);
 }
