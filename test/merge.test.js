@@ -12,6 +12,7 @@ const allKarma = _(require('./resources/karma.json')).mapKeys((v, k) => k.replac
 
 
 const allMocha = require('./resources/mocha.json');
+const allPact = require('./resources/pact.json');
 const allKarmaClone = _.cloneDeep(allKarma);
 const allMochaClone = _.cloneDeep(allMocha);
 const problemFile = path.normalize('src\\kachelVertrag\\gui\\kachelVertrag.service.ts');
@@ -38,6 +39,13 @@ describe('istanbul-prepare-merge', () => {
     test('merges function coverage sucessfully', () => {
         const result = merge([allKarma, allMocha]);
         expect(result[problemFile].f[1]).toEqual(2);
+        checkUnchanged();
+    });
+
+    test('merge line coverage sucessfully', () => {
+        const result = merge([allMocha, allPact]);
+        const file = path.normalize('src\\vertragReadModel\\vertrag.readModel.integrationservices.ts');
+        expect(result[file].l[1]).toEqual(2);
         checkUnchanged();
     });
 
