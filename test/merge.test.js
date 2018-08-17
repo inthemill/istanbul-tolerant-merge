@@ -57,11 +57,10 @@ describe('istanbul-prepare-merge', () => {
             probFile = path.normalize('src\\kachelVertrag\\gui\\kachelVertrag.service.ts');
         } else {
             pathToBeModified = process.cwd() + '/src/kachelVertrag/gui/kachelVertrag.service.ts';
-            probFile = normalize('src\\kachelVertrag\\gui\\kachelVertrag.service.ts');
+            probFile = normalize('src/kachelVertrag/gui/kachelVertrag.service.ts');
         }
         expect(allKarma[pathToBeModified]).not.toBeUndefined();
-
-        expect(getProblemCoverage(allKarma)).toBeUndefined();
+        expect(allKarma[probFile]).toBeUndefined();
 
         const result = merge([allKarma, allMocha], {
             base: process.cwd()
