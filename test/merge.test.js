@@ -50,7 +50,15 @@ describe('istanbul-prepare-merge', () => {
     });
 
     test('normalize file path', () => {
-        const pathToBeModified = process.cwd() + '\\src\\kachelVertrag\\gui\\kachelVertrag.service.ts';
+        let pathToBeModified;
+        let probFile;
+        if (process.platform === 'win32') {
+            pathToBeModified = process.cwd() + '\\src\\kachelVertrag\\gui\\kachelVertrag.service.ts';
+            probFile = path.normalize('src\\kachelVertrag\\gui\\kachelVertrag.service.ts');
+        } else {
+            pathToBeModified = process.cwd() + '/src/kachelVertrag/gui/kachelVertrag.service.ts';
+            probFile = normalize('src\\kachelVertrag\\gui\\kachelVertrag.service.ts');
+        }
         expect(allKarma[pathToBeModified]).not.toBeUndefined();
 
         expect(getProblemCoverage(allKarma)).toBeUndefined();
@@ -60,8 +68,9 @@ describe('istanbul-prepare-merge', () => {
         });
         expect(getCoverageOfFile(result, pathToBeModified)).toBeUndefined();
         expect(getProblemCoverage(result).f[1]).toEqual(2);
+        expect(getProblemCoverage(result).path).toEqual(probFile);
         const result2 = merge([allMocha, allKarma]);
-        expect(getProblemCoverage(result2).path).toEqual(problemFile);
+        expect(getProblemCoverage(result2).path).toEqual(probFile);
     });
 
     test('path.relative', () => {
