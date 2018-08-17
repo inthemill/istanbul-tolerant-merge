@@ -10,10 +10,11 @@ const allKarma = _(require('./resources/karma.json')).mapKeys((v, k) => k.replac
     path: k
 })).value();
 
+
 const allMocha = require('./resources/mocha.json');
 const allKarmaClone = _.cloneDeep(allKarma);
 const allMochaClone = _.cloneDeep(allMocha);
-const problemFile = normalize('src\\kachelVertrag\\gui\\kachelVertrag.service.ts');
+const problemFile = path.normalize('src\\kachelVertrag\\gui\\kachelVertrag.service.ts');
 
 describe('istanbul-prepare-merge', () => {
     test('merged json has all needed keys', () => {
@@ -104,7 +105,7 @@ describe('istanbul-prepare-merge', () => {
 
     test('can find problem in bad files', () => {
         const result = merge([__dirname + '/resources/bad1/*.json']);
-        expect(result['src/produktauswahl/produktauswahlNeugeschaeft.component.ts'].s[1]).toEqual(2);
+        expect(result[path.normalize('src/produktauswahl/produktauswahlNeugeschaeft.component.ts')].s[1]).toEqual(2);
     });
 
 });
