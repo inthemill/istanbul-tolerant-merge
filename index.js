@@ -136,7 +136,7 @@ function mergeLines(one, two) {
     if (!one.l || !two.l) {
         console.warn(`l of ${one.path} cannot be merged`);
         return;
-    };
+    }
     const linesOne = _.cloneDeep(one.l);
     const linesTwo = _.cloneDeep(two.l);
     return {
