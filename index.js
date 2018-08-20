@@ -133,8 +133,12 @@ function mergeStatements(one, two) {
 }
 
 function mergeLines(one, two) {
-    const linesOne = _.isUndefined(one.l) ? {} : _.cloneDeep(one.l);
-    const linesTwo = _.isUndefined(two.l) ? {} : _.cloneDeep(two.l);
+    if (!one.l || !two.l) {
+        console.warn(`l of ${one.path} cannot be merged`);
+        return;
+    };
+    const linesOne = _.cloneDeep(one.l);
+    const linesTwo = _.cloneDeep(two.l);
     return {
         l: _.mergeWith(linesOne, linesTwo, (a, b) => {
             if (!a) a = 0;
