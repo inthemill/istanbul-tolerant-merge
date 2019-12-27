@@ -30,7 +30,7 @@ Options:
                                                              [string] [required]
   --base     if pathes in coverage report JSON files are absolute, they will be
              rewritten relative based to this value
-      [string] [default: "/home/emanuel/dev/opensource/istanbul-tolerant-merge"]
+      [string] [default is current working directory]
   --help     Show help                                                 [boolean]
   --version  Show version number                                       [boolean]
 
