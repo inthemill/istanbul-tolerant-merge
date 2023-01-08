@@ -58,29 +58,6 @@ describe('istanbul-prepare-merge', () => {
         checkUnchanged();
     });
 
-    // test('normalize file path', () => {
-    //     let pathToBeModified;
-    //     let probFile;
-    //     if (process.platform === 'win32') {
-    //         pathToBeModified = process.cwd() + '\\src\\kachelVertrag\\gui\\kachelVertrag.service.ts';
-    //         probFile = path.normalize('src\\kachelVertrag\\gui\\kachelVertrag.service.ts');
-    //     } else {
-    //         pathToBeModified = process.cwd() + '/src/kachelVertrag/gui/kachelVertrag.service.ts';
-    //         probFile = normalize('src/kachelVertrag/gui/kachelVertrag.service.ts');
-    //     }
-    //     expect(allKarma[pathToBeModified]).not.toBeUndefined();
-    //     expect(allKarma[probFile]).toBeUndefined();
-    //
-    //     const result = merge([allKarma, allMocha], {
-    //         base: process.cwd()
-    //     });
-    //     expect(getCoverageOfFile(result, pathToBeModified)).toBeUndefined();
-    //     expect(getProblemCoverage(result).f[1]).toEqual(2);
-    //     expect(getProblemCoverage(result).path).toEqual(probFile);
-    //     const result2 = merge([allMocha, allKarma]);
-    //     expect(getProblemCoverage(result2).path).toEqual(probFile);
-    // });
-
     test('path.relative', () => {
         let abs = path.resolve('src', 'index');
         expect(abs).toEqual(path.join(process.cwd(), 'src', 'index'));
