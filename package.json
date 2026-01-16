@@ -1,6 +1,6 @@
 {
   "name": "istanbul-tolerant-merge",
-  "version": "1.2.5",
+  "version": "1.2.6",
   "description": "Merges several istanbul coverage report JSON files into one. Thereby normalizes absolute path to relative ones, fixes a problem with karma-coverage-istanbul-reporter and aligns list of statements, that do not match 1:1 with some heuristics",
   "main": "index.js",
   "scripts": {
@@ -12,7 +12,7 @@
     "istanbul-tolerant-merge": "bin/istanbul-tolerant-merge.js"
   },
   "engines": {
-    "node": ">=8.0"
+    "node": ">=20.0"
   },
   "repository": {
     "type": "git",
@@ -20,16 +20,16 @@
   },
   "dependencies": {
     "a-star": "^0.2.0",
-    "glob": "^8.0.3",
+    "glob": ">=8.0.0 <14.0.0",
     "lodash": "^4.17.15",
     "normalize-path": "^3.0.0",
-    "yargs": "^17.6.2"
+    "yargs": ">=17.0.0 <19.0.0"
   },
   "jest": {
     "verbose": true
   },
   "devDependencies": {
-    "jest": "^29.3.1",
+    "jest": "^30.2.0",
     "temp": "^0.9.4"
   }
 }
